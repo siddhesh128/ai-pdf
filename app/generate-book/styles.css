@@ -1,0 +1,31 @@
+.demo-book {
+  background-color: transparent;
+  touch-action: none;
+}
+
+.demo-book > div {
+  background-color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.flip-book {
+  touch-action: none;
+}
+
+.page {
+  padding: 20px;
+  background-color: white;
+  border: 1px solid #c2c2c2;
+  border-radius: 4px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.--left {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.--right {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
