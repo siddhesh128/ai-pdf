@@ -14,7 +14,7 @@ import {
   ChevronRight
 } from 'lucide-react';
 import { BookProvider } from '@/context/BookContext';
-import { ClerkProvider, SignIn } from "@clerk/nextjs";
+import { ClerkProvider, SignedIn, SignedOut, UserButton, SignInButton } from "@clerk/nextjs";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -40,12 +40,30 @@ const Sidebar = ({ activeTab, handleTabChange }) => {
     <>
       {/* Desktop Sidebar */}
       <div className="hidden md:fixed md:left-0 md:top-0 md:h-screen md:w-72 md:flex md:flex-col bg-gradient-to-b from-[#1E293B] to-[#0F172A] shadow-xl z-50 p-6">
-        <div className="flex items-center mb-12">
+        <div className="flex items-center mb-6">
           <Book className="mr-3 text-blue-400" size={32} />
           <h1 className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600">
             BookCraft AI
           </h1>
         </div>
+
+        {/* Add User Profile Section */}
+        <div className="mb-8 p-3 bg-gray-800/50 rounded-lg">
+          <div className="flex items-center justify-between">
+            <UserButton
+              appearance={{
+                elements: {
+                  userButtonBox: "w-full flex items-center justify-between",
+                  userButtonTrigger: "flex items-center gap-2",
+                  userButtonAvatarBox: "w-10 h-10",
+                  userButtonOuterIdentifier: "text-gray-300 ml-2",
+                }
+              }}
+              afterSignOutUrl="/sign-in"
+            />
+          </div>
+        </div>
+
         <nav className="space-y-2">
           {menuItems.map((item) => (
             <button
@@ -114,10 +132,15 @@ export default function RootLayout({ children }) {
       <html lang="en">
         <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
           <BookProvider>
-            <Sidebar activeTab={activeTab} handleTabChange={handleTabChange} />
-            <div className="md:ml-72 pb-20 md:pb-0">
+            <SignedIn>
+              <Sidebar activeTab={activeTab} handleTabChange={handleTabChange} />
+              <div className="md:ml-72 pb-20 md:pb-0">
+                {children}
+              </div>
+            </SignedIn>
+            <SignedOut>
               {children}
-            </div>
+            </SignedOut>
           </BookProvider>
         </body>
       </html>

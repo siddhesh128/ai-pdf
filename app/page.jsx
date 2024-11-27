@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useUser } from "@clerk/nextjs";
-import { query } from '@/lib/db';
 import { 
   Library, 
   PlusCircle,
@@ -17,31 +16,47 @@ const Dashboard = () => {
   const router = useRouter();
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (!user) return;
+    if (!isLoaded) return;
+    
+    if (!user) {
+      router.push('/sign-in');
+      return;
+    }
 
     const fetchBooks = async () => {
+      setLoading(true);
       try {
         const response = await fetch('/api/books');
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+          throw new TypeError("Received non-JSON response from server");
+        }
+
         const data = await response.json();
         setBooks(data);
       } catch (error) {
-        console.error('Error fetching books:', error);
+        console.error('Error fetching books:', error.message);
+        setError('Failed to load books. Please try again later.');
       } finally {
         setLoading(false);
       }
     };
 
     fetchBooks();
-  }, [user]);
+  }, [user, isLoaded, router]);
 
   if (!isLoaded) {
     return <div>Loading...</div>;
   }
 
   if (!user) {
-    router.push('/sign-in');
     return null;
   }
 
@@ -65,6 +80,8 @@ const Dashboard = () => {
           <div className="bg-white rounded-2xl shadow-lg p-6">
             {loading ? (
               <div>Loading books...</div>
+            ) : error ? (
+              <div className="text-gray-900 font-medium">{error}</div>
             ) : (
               <div className="space-y-4">
                 {books.map((book) => (
