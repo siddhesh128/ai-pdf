@@ -30,6 +30,7 @@ const Dashboard = () => {
       setLoading(true);
       try {
         const response = await fetch('/api/books');
+        
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -60,6 +61,31 @@ const Dashboard = () => {
     return null;
   }
 
+  const BookCard = ({ book }) => (
+    <div className="bg-white p-4 rounded-lg shadow hover:shadow-md transition-shadow">
+      <div className="aspect-w-3 aspect-h-4 mb-4">
+        <img
+          src={book.images[0] || '/placeholder.png'}
+          alt={book.title}
+          className="object-cover rounded-md w-full h-full"
+        />
+      </div>
+      <h3 className="font-semibold text-lg mb-2">{book.title}</h3>
+      <p className="text-sm text-gray-500 mb-4">{book.description}</p>
+      <div className="flex justify-between items-center">
+        <span className="text-sm text-gray-500">
+          {new Date(book.createdAt).toLocaleDateString()}
+        </span>
+        <button
+          onClick={() => router.push(`/books/${book.id}`)}
+          className="text-blue-600 hover:text-blue-800"
+        >
+          View Book →
+        </button>
+      </div>
+    </div>
+  );
+
   return (
     <div className="p-4 md:p-10 bg-gray-50 min-h-screen">
       <div className="max-w-6xl mx-auto">
@@ -83,17 +109,9 @@ const Dashboard = () => {
             ) : error ? (
               <div className="text-gray-900 font-medium">{error}</div>
             ) : (
-              <div className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {books.map((book) => (
-                  <div 
-                    key={book.id} 
-                    className="flex items-center justify-between p-3 bg-gray-100 rounded-lg"
-                  >
-                    <span className="font-medium">{book.title}</span>
-                    <span className="text-sm text-gray-500">
-                      {new Date(book.created_at).toLocaleDateString()}
-                    </span>
-                  </div>
+                  <BookCard key={book.id} book={book} />
                 ))}
               </div>
             )}

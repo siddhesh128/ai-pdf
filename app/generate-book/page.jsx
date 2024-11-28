@@ -50,7 +50,6 @@ const GenerateBook = () => {
 
   const handleFinish = async () => {
     try {
-      // Save book to database
       const response = await fetch('/api/books/create', {
         method: 'POST',
         headers: {
@@ -58,20 +57,23 @@ const GenerateBook = () => {
         },
         body: JSON.stringify({
           title: bookData.title,
-          description: bookData.description,
-          category: bookData.category,
+          description: bookData.description || '',
+          category: bookData.category || 'general',
           images: bookData.images,
         }),
       });
 
+      const data = await response.json();
+
       if (!response.ok) {
-        throw new Error('Failed to save book');
+        throw new Error(data.error || 'Failed to save book');
       }
 
+      alert('Book created successfully!');
       router.push('/');
     } catch (error) {
       console.error('Error saving book:', error);
-      // Handle error appropriately
+      alert('Failed to save book: ' + (error.message || 'Please try again'));
     }
   };
 
