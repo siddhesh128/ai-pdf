@@ -89,7 +89,7 @@ const Sidebar = ({ activeTab, handleTabChange }) => {
       {/* Mobile Bottom Navigation */}
       <div className="fixed bottom-0 left-0 right-0 bg-gradient-to-r from-[#1E293B] to-[#0F172A] md:hidden z-50">
         <nav className="flex justify-around p-4">
-          {menuItems.slice(0, 4).map((item) => (
+          {menuItems.slice(0, 3).map((item) => (
             <button
               key={item.tab}
               onClick={() => handleTabChange(item.tab)}
@@ -101,6 +101,16 @@ const Sidebar = ({ activeTab, handleTabChange }) => {
               <span className="text-xs mt-1">{item.label}</span>
             </button>
           ))}
+          <UserButton
+            appearance={{
+              elements: {
+                userButtonBox: "flex flex-col items-center",
+                userButtonAvatarBox: "w-6 h-6",
+                userButtonOuterIdentifier: "text-xs text-gray-400 mt-1",
+              }
+            }}
+            afterSignOutUrl="/sign-in"
+          />
         </nav>
       </div>
     </>

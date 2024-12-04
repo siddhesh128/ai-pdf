@@ -4,9 +4,9 @@ import { SignUp } from "@clerk/nextjs";
 
 export default function Page() {
   return (
-    <div className="min-h-screen flex bg-gradient-to-br from-[#1E293B] to-[#0F172A]">
-      {/* Left side animation */}
-      <div className="w-1/2 flex items-center justify-center p-8">
+    <div className="min-h-screen flex flex-col md:flex-row bg-gradient-to-br from-[#1E293B] to-[#0F172A]">
+      {/* Left side animation - hidden on mobile */}
+      <div className="hidden md:flex md:w-1/2 items-center justify-center p-4 md:p-8">
         <div className="relative">
           <div className="absolute -inset-1 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 opacity-75 blur animate-pulse"></div>
           <div className="relative bg-black/20 backdrop-blur-xl rounded-lg p-8">
@@ -22,14 +22,14 @@ export default function Page() {
         </div>
       </div>
       
-      {/* Right side form */}
-      <div className="w-1/2 flex items-center justify-center p-4">
-        <div className="w-full max-w-md">
-          <div className="mb-8 text-center">
-            <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600 mb-2">
+      {/* Right side form - full width on mobile */}
+      <div className="w-full md:w-1/2 flex items-center justify-center p-4 min-h-screen md:min-h-0">
+        <div className="w-full max-w-md px-4 md:px-0">
+          <div className="mb-6 md:mb-8 text-center">
+            <h1 className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600 mb-2">
               Join BookCraft AI
             </h1>
-            <p className="text-gray-400">Create your account and start crafting amazing books</p>
+            <p className="text-gray-400 text-sm md:text-base">Create your account and start crafting amazing books</p>
           </div>
           <SignUp
             appearance={{
